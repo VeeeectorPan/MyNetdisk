@@ -7,11 +7,12 @@ void child_process_handler(int pipefd)
     int sockfd;
     while(1)
     {
-        recv_sockfd(&sockfd);
+        recv_fd(pipefd,&sockfd);
         printf("Download!\n");
         // mission completed!
         printf("Download completed!\n");
-        write(sockfd,&flag,1);
+        write(pipefd,&flag,1);
+        close(sockfd);
     }
 
 }

@@ -10,13 +10,22 @@ typedef struct
     char isbusy;
 }child_proc_t;
 
+typedef struct
+{
+    // 0 ~ _SC_PAGE_SIZE - sizeof(int)* 2
+    int data_len;
+    int data_type;
+    char buf[_SC_PAGE_SIZE - sizeof(int) * 2];
+}trans_t;
+
 // generate child process and set child process information.
 int make_child_process(child_proc_t*,int);
 // child process function
 void child_process_handler(int pipefd);
 // receive mission
 int recv_sockfd(int*);
-
+int recv_fd(int pipefd,int* fd);
+int send_fd(int pipefd,int fd);
 
 
 #endif

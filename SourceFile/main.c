@@ -24,6 +24,7 @@ int main(int argc,char* argv[])
     {
         add_fd_to_epoll(epoll_fd,childInfoArr[i].fd,EPOLLIN);
     }
+    add_fd_to_epoll(epoll_fd,sfd,EPOLLIN);
     int listen_num = proc_num + 1;
     struct epoll_event* evs = (struct epoll_event*)malloc(sizeof(struct epoll_event)*listen_num);
     queue_t client_que,spare_que;
@@ -44,12 +45,15 @@ int main(int argc,char* argv[])
                 if(que_size(&spare_que) > 0)
                 {
                     int child_fd = que_pop(&spare_que);
+                    send_fd(child_fd,client_fd);
+                    close(client_fd);
                 }
                 else 
                 {
                     ret = que_push(&client_que,client_fd);
                     if(ret == -1)
                     {
+                        close(client_fd);
                         perror("server full!\n");
                     }
                 }
@@ -57,14 +61,18 @@ int main(int argc,char* argv[])
             else
             {
                 // there are clients waitting
+                int child_fd = evs[i].data.fd;
+                char flag;
+                read(child_fd,&flag,1);
                 if(que_size(&client_que) > 0)
                 {
                     int client_fd = que_pop(&client_que);
-
+                    send_fd(child_fd,client_fd);
+                    close(client_fd);
                 }
                 else
                 {
-                    que_push(&spare_que,evs[i].data.fd);
+                    que_push(&spare_que,child_fd);
                 }
             }
         }
