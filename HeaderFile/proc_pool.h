@@ -10,12 +10,12 @@ typedef struct
     char isbusy;
 }child_proc_t;
 
+#define FILENAME "file"
 typedef struct
 {
-    // 0 ~ _SC_PAGE_SIZE - sizeof(int)* 2
+    // 0 ~ _SC_PAGE_SIZE - sizeof(int)
     int data_len;
-    int data_type;
-    char buf[_SC_PAGE_SIZE - sizeof(int) * 2];
+    char buf[_SC_PAGE_SIZE - sizeof(int)];
 }trans_t;
 
 // generate child process and set child process information.
