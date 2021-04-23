@@ -1,12 +1,11 @@
 #include "../HeaderFile/unixhead.h"
-int send_fd(int pipefd,int fd)
+int send_fd(int pipefd,int fd,int flag)
 {
     struct msghdr msg;
     memset(&msg,0,sizeof(msg));
     struct iovec iov[1];
-    char buf[10] = "hello";
-    iov[0].iov_base = buf;
-    iov[0].iov_len = 5;
+    iov[0].iov_base = &flag;
+    iov[0].iov_len = 4;
     msg.msg_iov = iov;
     msg.msg_iovlen = 1;
     struct cmsghdr* cmsg;

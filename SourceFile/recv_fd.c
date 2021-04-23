@@ -1,13 +1,13 @@
 #include "../HeaderFile/unixhead.h"
 
-int recv_fd(int pipefd,int* fd)
+int recv_fd(int pipefd,int* fd,int *flag)
 {
     struct msghdr msg;
     memset(&msg,0,sizeof(msg));
     struct iovec iov[1];
-    char buf[10] = "hello";
-    iov[0].iov_base = buf;
-    iov[0].iov_len = 5;
+    int flag_buf = 0;
+    iov[0].iov_base = &flag_buf;
+    iov[0].iov_len = 4;
     msg.msg_iov = iov;
     msg.msg_iovlen = 1;
     struct cmsghdr * cmsg;
@@ -21,6 +21,7 @@ int recv_fd(int pipefd,int* fd)
     int ret = recvmsg(pipefd,&msg,0);
     ERROR_CHECK(ret,-1,"recvmsg");
     *fd = *(int*)CMSG_DATA(cmsg);
+    *flag = *(int*)iov[0].iov_base;
     return 0;
 }
 

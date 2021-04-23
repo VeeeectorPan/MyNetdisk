@@ -1,6 +1,5 @@
 #include "../HeaderFile/unixhead.h"
 #include "../HeaderFile/proc_pool.h"
-#include <stdio.h>
 int main(int argc,char* argv[])
 {
     // link to server
@@ -43,30 +42,14 @@ int main(int argc,char* argv[])
     ERROR_CHECK(ret,-1,"server disconnected!\n");
     off_t file_size = *(off_t*)buf;
     printf("total size = %ld.\n",file_size);
-    off_t download_size = 0;
-    off_t last_download_size = 0;
-    off_t slice_size = file_size / 10000;
-    while(1)
-    {
-        recv_len = 0;
-        ret = recv_n_bytes(sfd,&recv_len,sizeof(int));
-        if(recv_len == 0)
-        {
-            printf("%5.2f%%\n",100.0);
-            break;
-        }
-        ERROR_CHECK(ret,-1,"server disconnected!\n");
-        ret = recv_n_bytes(sfd,buf,recv_len);
-        ERROR_CHECK(ret,-1,"server disconnected!\n");
-        write(fd,buf,recv_len);
-        download_size += recv_len;
-        if(download_size - last_download_size >= slice_size)
-        {
-            printf("%5.2f%%\r",(double)download_size/file_size * 100);
-            fflush(stdout);
-            last_download_size = download_size;
-        }
-    }
+
+    // recv file
+    time_t beg = time(NULL);
+    ret = recv_file(sfd,fd,file_size);
+    ERROR_CHECK(ret,-1,"recv_file");
+    time_t end = time(NULL);
+    printf("total time = %ld\n",end - beg);
+
     close(fd);
     close(sfd);
 }

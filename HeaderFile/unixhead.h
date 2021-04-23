@@ -1,10 +1,12 @@
 #ifndef __PH__HEADER__H
 #define __PH__HEADER__H
+#define _GNU_SOURCE 1
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <sys/mman.h>
+#include <sys/sendfile.h>
 #include <libgen.h>
 #include <pthread.h>
 #include <arpa/inet.h>
@@ -25,11 +27,11 @@
 #include <sys/sysmacros.h>
 #include <stdio.h>
 #include <pwd.h>
-#include <fcntl.h>
 #include <grp.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <fcntl.h>
 #define ARGS_CHECK(argc,num)\
 {\
     if(argc != num)\

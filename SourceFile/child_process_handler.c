@@ -3,13 +3,18 @@
 
 void child_process_handler(int pipefd)
 {
-    char flag = 1; 
+    int flag;
     int sockfd;
     int file_fd = open(FILENAME,O_RDWR);
     while(1)
     {
         lseek(file_fd,0,SEEK_SET);
-        recv_fd(pipefd,&sockfd);
+        recv_fd(pipefd,&sockfd,&flag);
+        if(flag == EXIT_SIG_FLAG)
+        {
+            printf("%dexit\n",pipefd);
+            exit(0);
+        }
         printf("Download!\n");
         transfer_file(sockfd,file_fd);
         printf("Download completed!\n");

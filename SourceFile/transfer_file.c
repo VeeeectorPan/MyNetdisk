@@ -1,6 +1,5 @@
 #include "../HeaderFile/proc_pool.h"
 #include "../HeaderFile/unixhead.h"
-#include <sys/socket.h>
 
 int transfer_file(int sock_fd,int file_fd)
 {
@@ -26,12 +25,7 @@ int transfer_file(int sock_fd,int file_fd)
     ret = send(sock_fd,&tran,tran.data_len + sizeof(int),MSG_NOSIGNAL);
     ERROR_CHECK(ret,-1,"send");
 
-
-    // send file
-    while((tran.data_len = read(file_fd,tran.buf,sizeof(tran.buf))) != 0)
-    {
-        ret = send(sock_fd,&tran,tran.data_len + sizeof(int),MSG_NOSIGNAL);
-        ERROR_CHECK(ret,-1,"send");
-    }
+    ret = sendfile(sock_fd,file_fd,NULL,file_st.st_size);
+    ERROR_CHECK(ret,-1,"sendfile");
     return 0;
 }
