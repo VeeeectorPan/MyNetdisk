@@ -14,7 +14,6 @@ int make_child_process(child_proc_t* infoArr,int proc_num)
             child_process_handler(fds[1]);
         }
         close(fds[1]);
-        infoArr[i].isbusy = 0;
         infoArr[i].fd = fds[0];
     }
 #ifdef __DEBUG

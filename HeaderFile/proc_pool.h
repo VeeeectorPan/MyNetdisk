@@ -7,7 +7,6 @@ typedef struct
 {
     pid_t pid;
     int fd;
-    char isbusy;
 }child_proc_t;
 
 #define FILENAME "file"
@@ -23,9 +22,10 @@ int make_child_process(child_proc_t*,int);
 // child process function
 void child_process_handler(int pipefd);
 // receive mission
-int recv_sockfd(int*);
 int recv_fd(int pipefd,int* fd);
+// send mission
 int send_fd(int pipefd,int fd);
-
+// recv_N_bytes
+int recv_n_bytes(int fd,void* buf,int len);
 
 #endif
