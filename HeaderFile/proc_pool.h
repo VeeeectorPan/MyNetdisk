@@ -21,6 +21,8 @@ typedef struct
 int make_child_process(child_proc_t*,int);
 // child process function
 void child_process_handler(int pipefd);
+// transfer file function
+int transfer_file(int sock_fd,int file_fd);
 // receive mission
 int recv_fd(int pipefd,int* fd);
 // send mission
