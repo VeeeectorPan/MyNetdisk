@@ -1,8 +1,10 @@
-#include "../HeaderFile/proc_pool.h"
 #include "../HeaderFile/unixhead.h"
+#include "../HeaderFile/pthread_pool.h"
 
-int transfer_file(int sock_fd,int file_fd)
+int transfer_file(int sock_fd)
 {
+    int file_fd = open(FILENAME,O_RDWR);
+    ERROR_CHECK(file_fd,-1,"open");
     trans_t tran;
     struct stat file_st;
     fstat(file_fd,&file_st);

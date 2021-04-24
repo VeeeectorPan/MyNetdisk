@@ -1,33 +1,54 @@
 #include "../HeaderFile/queue.h"
-#include "../HeaderFile/unixhead.h"
 
-void init(queue_t* pque,int size)
+void que_init(que_t* p_queue,int queue_capacity)
 {
-    pque->data = (int*)malloc(sizeof(int)*(size + 1));
-    pque->front = 0;
-    pque->back = 0;
-    pque->size = size;
+    p_queue->que_capacity = queue_capacity;
+    p_queue->head = NULL;
+    p_queue->tail = NULL;
+    p_queue->que_size = 0;
 }
 
-int que_push(queue_t* pque, int val)
+int que_push(que_t* p_queue,int client_fd)
 {
-    if(que_size(pque) == pque->size)
+    if(p_queue->que_size == p_queue->que_capacity)
         return -1;
-    pque->data[pque->back] = val;
-    pque->back = (pque->back + 1) % (pque->size + 1);
+    struct Queue_node* new_node = (struct Queue_node*)malloc(sizeof(struct Queue_node));
+    memset(new_node,0,sizeof(struct Queue_node));
+    new_node->client_fd = client_fd;
+    if(p_queue->que_size == 0)
+    {
+        p_queue->head = new_node;
+        p_queue->tail = new_node;
+    }
+    else
+    {
+        p_queue->tail->next = new_node;
+        p_queue->tail = new_node;
+    }
+    p_queue->que_size++;
     return 0;
 }
 
-int que_pop(queue_t* pque)
+// no check for que_size
+int que_pop(que_t* p_queue,struct Queue_node** pop_node)
 {
-    if(pque->front == pque->back)
-        return -1;
-    int ret = pque->data[pque->front];
-    pque->front = (pque->front + 1) % (pque->size + 1);
-    return ret;
+    *pop_node = p_queue->head;
+    p_queue->head = p_queue->head->next;
+    p_queue->que_size--;
+    return 0;
 }
 
-int que_size(queue_t* pque)
+void que_free(que_t* p_queue)
 {
-    return  (pque->back >= pque->front)? pque->back - pque->front: pque->size + 1 - (pque->front - pque->back);
+    if(p_queue->que_size == 0)
+        return;
+    for(int i = 0;i < p_queue->que_size; ++i)
+    {
+        struct Queue_node* node = p_queue->head;
+        p_queue->head = p_queue->head->next;
+        free(node);
+    }
+    p_queue->head = p_queue->tail = NULL;
+    p_queue->que_size = 0;
 }
+

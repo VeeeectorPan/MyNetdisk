@@ -7,13 +7,13 @@ out:=server
 out2:=client
 all:$(out) $(out2)
 $(out2):$(objs2)
-	$(CC) $(objs2) -o $(out2)
+	$(CC) $(objs2) -o $(out2) -pthread
 %.o:%.c
-	$(CC) -g -Wall -c $^ -o $@
+	$(CC) -g -Wall -c $^ -o $@ -pthread
 $(out):$(objs)
-	$(CC) $(objs) -o $(out) 
+	$(CC) $(objs) -o $(out) -pthread
 %.o:%.c
-	$(CC) -g -Wall -c $^ -o $@
+	$(CC) -g -Wall -c $^ -o $@ -pthread
 .PHONY:clean rebuild
 clean:
 	$(RM) $(objs) $(out) $(objs2) $(out2)
