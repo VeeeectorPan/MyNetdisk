@@ -1,15 +1,22 @@
 #ifndef  __PTHREAD__POOL__
 #define  __PTHREAD__POOL__
+
 #include "queue.h"
 #include "unixhead.h"
-#define FILENAME "file"
+
+#define FILE_STORE_PATH "/home/vecpan/MyNetdisk"
 typedef struct
 {
-    int data_len;
-    char buf[_SC_PAGE_SIZE - sizeof(int)];
-}trans_t;
+    char file_type;
+    int file_id;
+    char md5[33];
+    char file_name[128];
+}download_file_t;
 
 int recv_n_bytes(int fd,void* buf,int len);
 int recv_file(int sock_fd,int file_fd, int file_size);
+int recv_client_all(int fd,void* buf,int len);
+int send_file_to_client(int client_fd,int parent_id,char* file_name,char* path,MYSQL* connect);
+int send_file(int client_fd,int file_fd);
 
 #endif

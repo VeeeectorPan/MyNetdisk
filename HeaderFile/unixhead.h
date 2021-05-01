@@ -60,4 +60,5 @@
     }while(0);  \
 }
 
+int recv_user_file(int client_fd,int file_fd,off_t file_size);
 #endif
