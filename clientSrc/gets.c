@@ -21,7 +21,6 @@ void* pthread_download_file(void* arg)
         ret = recv(sock_fd,&file_type,sizeof(char),0);
         if(ret == 0)
             break;
-        printf("file_type = %c\n",file_type);
         if(file_type == 'd')
         {
             puts(buf);

@@ -41,7 +41,10 @@ int sign_up(int sock_fd)
         rewind(stdin);
         memset(user_passwd,0,sizeof(user_name));
         printf("password: ");
+        system("stty raw -echo");
         ret = scanf("%s",user_passwd);
+        system("stty -raw echo");
+        printf("\n");
         if(ret == -1)
             exit(0);
         user_passwd[31] = '\0';

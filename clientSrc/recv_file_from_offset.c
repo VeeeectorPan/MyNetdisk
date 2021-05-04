@@ -1,9 +1,9 @@
 #include "../HeaderFile/unixhead.h"
 #include "../HeaderFile/pthread_pool.h"
 
-int recv_file(int sock_fd,int file_fd, int file_size)
+int recv_file_from_offset(int sock_fd,int file_fd, int file_size,int offset)
 {
-    int total = 0;
+    int total = offset;
     int pipefd[2];
     int ret = pipe(pipefd);
     ERROR_CHECK(ret,-1,"pipe");

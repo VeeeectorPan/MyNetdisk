@@ -17,7 +17,10 @@ int login(int sock_fd)
         scanf("%s",user_name);
         rewind(stdin);
         printf("password: ");
+        system("stty raw -echo");
         scanf("%s",user_passwd);
+        system("stty -raw echo");
+        printf("\n");
         user_name[31] = '\0';
         user_passwd[31] = '\0';
         int len = strlen(user_name);

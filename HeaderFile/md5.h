@@ -46,6 +46,7 @@ void MD5Transform(unsigned int state[4], unsigned char block[64]);
 void MD5Encode(unsigned char *output, unsigned int *input, unsigned int len);
 void MD5Decode(unsigned int *output, unsigned char *input, unsigned int len);
 int compute_file_md5(const char* file_path,char* md5_str,int size);
+int compute_file_md5_2(int fd,char* md5_str,int size);
 
 #endif
 
